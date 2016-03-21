@@ -39,7 +39,7 @@ public class DsRecipeLib {
 			dsIntegrationId = this.getEnv("DS_INTEGRATION_ID");
 		}
 
-		if ((dsUserEmail != null) || (dsUserEmail.length() < 4)) {
+		if ((dsUserEmail == null) || (dsUserEmail.length() < 4)) {
 			logger.error(
 					"<h3>No DocuSign login settings! Either set in the script or use environment variables DS_USER_EMAIL, DS_USER_PW, and DS_INTEGRATION_ID</h3>");
 		}
