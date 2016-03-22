@@ -20,7 +20,7 @@ public class Webhook {
 			if (op != null && op != "") {
 				switch (op) {
 				case "send1":
-					return doSend1();
+					return doSend1(request.host());
 				case "status":
 					String envelopeId = request.queryParams("envelope_id");
 					return doStatus(envelopeId);
@@ -167,11 +167,11 @@ public class Webhook {
 		return result;
 	}
 
-	private static String doSend1() {
+	private static String doSend1(String url) {
 		// Show a button that sends the signature request
 		// When pressed, we're called with op=send2
 		WebhookLib webhookLib = new WebhookLib();
-		boolean ok = webhookLib.send1();
+		boolean ok = webhookLib.send1(url);
 		StringBuilder sb = new StringBuilder();
 		sb.append(showHeader());
 		if (ok) {

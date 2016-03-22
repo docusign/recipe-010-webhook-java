@@ -69,12 +69,13 @@ public class WebhookLib {
 
 	////////////////////////////////////////////////////////////////////////
 
-	public boolean send1() {
+	public boolean send1(String url) {
 		// Prepares for sending the envelope
 		Map<String, String> result = login();
 		if ("false".equals(result.get("ok"))) {
 			return false;
 		}
+		myUrl = url;
 
 		webhookUrl = (myUrl != null && !myUrl.isEmpty()) ? myUrl + webhookSuffix
 				: "http://localhost:5000/" + webhookSuffix;
