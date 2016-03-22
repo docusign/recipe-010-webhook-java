@@ -41,7 +41,7 @@ public class DsRecipeLib {
 
 		if ((dsUserEmail == null) || (dsUserEmail.length() < 4)) {
 			logger.error(
-					"<h3>No DocuSign login settings! Either set in the script or use environment variables DS_USER_EMAIL, DS_USER_PW, and DS_INTEGRATION_ID</h3>");
+					"<h3>No DocuSign login settings! Either set in the script or use environment variables dsUserEmail, dsUserPw, and dsIntegrationId</h3>");
 		}
 		// Decode the pw if it is in base64
 		if (this.b64PwPrefix.equals(dsUserPw.substring(0, this.b64PwPrefix.length()))) {
@@ -193,7 +193,7 @@ public class DsRecipeLib {
 		String ip = "100";
 		this.emailCount = (int) Math.pow(this.emailCount, 2);
 
-		String email = this.emailCount + new java.util.Date().toString() + ip;
+		String email = this.emailCount + new java.util.Date().getTime() + ip;
 		email = Base64.getEncoder().encodeToString(email.getBytes());
 
 		return email + "@" + tempEmailServer;
