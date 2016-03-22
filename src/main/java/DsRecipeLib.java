@@ -41,7 +41,7 @@ public class DsRecipeLib {
 
 		if ((dsUserEmail == null) || (dsUserEmail.length() < 4)) {
 			logger.error(
-					"<h3>No DocuSign login settings! Either set in the script or use environment variables dsUserEmail, dsUserPw, and dsIntegrationId</h3>");
+					"<h3>No DocuSign login settings! Either set in the script or use environment variables DS_USER_EMAIL, DS_USER_PW, and DS_INTEGRATION_ID</h3>");
 		}
 		// Decode the pw if it is in base64
 		if (this.b64PwPrefix.equals(dsUserPw.substring(0, this.b64PwPrefix.length()))) {
