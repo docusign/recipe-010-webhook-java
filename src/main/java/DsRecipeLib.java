@@ -196,7 +196,7 @@ public class DsRecipeLib {
 		String email = this.emailCount + new java.util.Date().getTime() + ip;
 		email = Base64.getEncoder().encodeToString(email.getBytes());
 		email = email.replaceAll("[^a-zA-Z0-9]", "");
-		email = email.substring(0, 24);
+		email = email.substring(0, Math.min(25, email.length()));
 
 		return email + "@" + tempEmailServer;
 	}
