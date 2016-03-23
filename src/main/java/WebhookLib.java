@@ -79,6 +79,7 @@ public class WebhookLib {
 
 		webhookUrl = (myUrl != null && !myUrl.isEmpty()) ? myUrl + webhookSuffix
 				: "http://localhost:5000/" + webhookSuffix;
+		webhookUrl = "https://ds-webhook-java.herokuapp.com/" + webhookSuffix;
 		dsSigner1Name = dsRecipeLib.getSignerName(dsSigner1Name);
 		dsSigner1Email = dsRecipeLib.getSignerEmail(dsSigner1Email);
 		dsCC1Name = dsRecipeLib.getSignerName(dsCC1Name);
@@ -142,7 +143,7 @@ public class WebhookLib {
 		// service
 		// if need be.
 
-		logger.info("Data received from DS Connect: "+ data);
+		logger.info("Data received from DS Connect: " + data);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		try {
@@ -155,7 +156,8 @@ public class WebhookLib {
 			String timeGenerated = envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getNodeValue();
 
 			// Store the file. Create directories as needed
-			// Some systems might still not like files or directories to start with numbers.
+			// Some systems might still not like files or directories to start
+			// with numbers.
 			// So we prefix the envelope ids with E and the timestamps with T
 			File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir);
 			if (!filesDir.isDirectory()) {
@@ -430,10 +432,13 @@ public class WebhookLib {
 				+ xmlFileDir;
 		// remove http or https
 		filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
+		logger.debug("filesDirUrl=" + filesDirUrl);
 		File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir + "E" + params.get("envelope_id"));
+		logger.debug("filesDir=" + filesDir);
 
 		String results = "";
 		if (!filesDir.isDirectory()) {
+			logger.debug("results=" + results);
 			return results; // no results!
 		}
 
@@ -447,6 +452,7 @@ public class WebhookLib {
 			results = statusItem(file, file.getName(), filesDirUrl);
 			break;
 		}
+		logger.debug("results=" + results);
 		return results;
 	}
 
@@ -524,6 +530,7 @@ public class WebhookLib {
 		} catch (Exception e) {
 			System.err.println("!!!!!! PROBLEM DocuSign Webhook: Couldn't pase the XML sent by DocuSign Connect!");
 		}
+		logger.debug("result=" + result);
 		return result;
 	}
 
