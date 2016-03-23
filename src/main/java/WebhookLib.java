@@ -432,13 +432,13 @@ public class WebhookLib {
 				+ xmlFileDir;
 		// remove http or https
 		filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
-		logger.debug("filesDirUrl=" + filesDirUrl);
+		logger.info("filesDirUrl=" + filesDirUrl);
 		File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir + "E" + params.get("envelope_id"));
-		logger.debug("filesDir=" + filesDir);
+		logger.info("filesDir=" + filesDir);
 
 		String results = "";
 		if (!filesDir.isDirectory()) {
-			logger.debug("results=" + results);
+			logger.info("results=" + results);
 			return results; // no results!
 		}
 
@@ -452,7 +452,7 @@ public class WebhookLib {
 			results = statusItem(file, file.getName(), filesDirUrl);
 			break;
 		}
-		logger.debug("results=" + results);
+		logger.info("results=" + results);
 		return results;
 	}
 
@@ -530,7 +530,7 @@ public class WebhookLib {
 		} catch (Exception e) {
 			System.err.println("!!!!!! PROBLEM DocuSign Webhook: Couldn't pase the XML sent by DocuSign Connect!");
 		}
-		logger.debug("result=" + result);
+		logger.info("result=" + result);
 		return result;
 	}
 
