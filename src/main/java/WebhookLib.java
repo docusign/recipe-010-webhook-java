@@ -161,12 +161,17 @@ public class WebhookLib {
 			// So we prefix the envelope ids with E and the timestamps with T
 			File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir);
 			if (!filesDir.isDirectory()) {
-				filesDir.mkdir();
-				// mkdir(filesDir, 0755);
+				filesDir.mkdirs();
+				filesDir.setReadable(true, false);
+				filesDir.setExecutable(true, false);
+				filesDir.setWritable(true, false);
 			}
 			File envelopeDir = new File(filesDir + "E" + envelopeId);
 			if (!envelopeDir.isDirectory()) {
-				envelopeDir.mkdir();
+				envelopeDir.mkdirs();
+				envelopeDir.setReadable(true, false);
+				envelopeDir.setExecutable(true, false);
+				envelopeDir.setWritable(true, false);
 			}
 			String filename = envelopeDir + "/T" + timeGenerated.replace(':', '_') + ".xml";
 			try {
