@@ -13,7 +13,7 @@ public class Webhook {
 	public static void main(String[] args) {
 
 		port(Integer.valueOf(System.getenv("PORT")));
-		staticFileLocation("/public");
+		staticFileLocation("/tmp/files");
 
 		get("/", (request, response) -> {
 			String op = request.queryParams("op");
