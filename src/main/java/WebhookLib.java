@@ -442,7 +442,7 @@ public class WebhookLib {
 		// remove http or https
 		filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
 		logger.info("filesDirUrl=" + filesDirUrl);
-		File filesDir = new File("/tmp" + xmlFileDir + "E" + params.get("envelope_id"));
+		File filesDir = new File("/tmp/" + xmlFileDir + "E" + params.get("envelope_id"));
 		logger.info("filesDir=" + filesDir);
 
 		String results = "";
