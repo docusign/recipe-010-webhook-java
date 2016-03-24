@@ -525,7 +525,7 @@ public class WebhookLib {
 				}
 			}
 
-			result = "[{" + "\"envelope_id\":\"" + envelopeId + "\"," + "\"xml_url\":\"" + filesDirUrl + "E" + envelopeId
+			result = "[{" + "\"envelope_id\":\"" + envelopeId + "\"," + "\"xml_url\":\"/tmp" + filesDirUrl + "E" + envelopeId
 					+ "/" + filename + "\"," + "\"time_generated\":\""
 					+ envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"subject\":\"" + envelopeStatus.getElementsByTagName("Subject").item(0).getChildNodes().item(0).getNodeValue() + "\","
