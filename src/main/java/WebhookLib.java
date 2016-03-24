@@ -152,13 +152,8 @@ public class WebhookLib {
 		try {
 			builder = factory.newDocumentBuilder();
 
-			byte[] bytes = Files.readAllBytes(Paths.get("connect.xml"));
-			logger.info("xml="+new String(bytes));
-			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(bytes)));
-			xml.getDocumentElement ().normalize();
-			logger.info("Root element of the doc is " + 
-	                 xml.getDocumentElement().getNodeName());
-			logger.info("Connect data parsed!");
+			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes("utf-8"))));
+                        logger.info("Connect data parsed!");
 			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
 			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
 			logger.info("envelopeId=" + envelopeId);
