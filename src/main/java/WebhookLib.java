@@ -214,13 +214,13 @@ public class WebhookLib {
 						}
 					} catch (Exception ex) {
 						// Couldn't write the file! Alert the humans!
-						System.err.println("!!!!!! PROBLEM DocuSign Webhook: Couldn't store " + filename + " !");
+						logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't store " + filename + " !");
 						return;
 					}
 				}
 			}
 		} catch (Exception e) {
-			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't pase the XML sent by DocuSign Connect!");
+			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect!");
 		}
 	}
 
@@ -289,7 +289,7 @@ public class WebhookLib {
 			Path path = Paths.get("./src/main/resources/public/" + docFilename);
 			fileBytes = Files.readAllBytes(path);
 		} catch (Exception ex) {
-			System.err.println(ex);
+			logger.error(ex.getMessage());
 		}
 		Document document = new Document();
 		String base64Doc = Base64.getEncoder().encodeToString(fileBytes);
@@ -358,7 +358,7 @@ public class WebhookLib {
 					+ "\", \r\n \"js\": [{\"disable_button\": \"sendbtn\"}]}";
 		} catch (Exception e) {
 			if (e instanceof ApiException) {
-				System.out.println(((ApiException) e).getCode());
+				logger.error(((ApiException) e).getResponseBody());
 			}
 			e.printStackTrace();
 		}
@@ -442,7 +442,7 @@ public class WebhookLib {
 		// remove http or https
 		filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
 		logger.info("filesDirUrl=" + filesDirUrl);
-		File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir + "E" + params.get("envelope_id"));
+		File filesDir = new File("/tmp" + xmlFileDir + "E" + params.get("envelope_id"));
 		logger.info("filesDir=" + filesDir);
 
 		String results = "";
@@ -537,7 +537,7 @@ public class WebhookLib {
 					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
 		} catch (Exception e) {
-			System.err.println("!!!!!! PROBLEM DocuSign Webhook: Couldn't pase the XML sent by DocuSign Connect!");
+			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect!");
 		}
 		logger.info("result=" + result);
 		return result;
