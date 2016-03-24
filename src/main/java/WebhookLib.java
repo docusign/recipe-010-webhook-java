@@ -490,7 +490,7 @@ public class WebhookLib {
 			Element recipientStatuses = (Element) envelopeStatus.getElementsByTagName("RecipientStatuses").item(0);
 
 			// iterate through the recipients
-			String recipients = "";
+			String recipients = "{}";
 			NodeList nodeList = recipientStatuses.getElementsByTagName("RecipientStatus");
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Element recipient = (Element) nodeList.item(i);
@@ -507,7 +507,7 @@ public class WebhookLib {
 						+ "\"" + "}";
 			}
 
-			String documents = "";
+			String documents = "{}";
 			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
 			// iterate through the documents if the envelope is Completed
 			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue())) {
@@ -545,7 +545,7 @@ public class WebhookLib {
 					+ (envelopeStatus.getElementsByTagName("Completed").getLength()>0?envelopeStatus.getElementsByTagName("Completed").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"timezone\":\"" + xml.getElementsByTagName("TimeZone").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"timezone_offset\":\"" + xml.getElementsByTagName("TimeZoneOffset").item(0).getChildNodes().item(0).getNodeValue()
-					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
+					+ "\"," + "\"recipients\":" + recipients + "," + "\"documents\":" + documents + "}";
 		} catch (Exception e) {
 			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML stored from DocuSign Connect: " + e.getMessage());
 		}
