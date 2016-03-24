@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -151,10 +152,14 @@ public class WebhookLib {
 		try {
 			builder = factory.newDocumentBuilder();
 
-			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes("utf-8"))));
+			byte[] bytes = Files.readAllBytes(Paths.get("connect.xml"));
+			logger.info("xml="+new String(bytes));
+			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(bytes)));
+			xml.getDocumentElement ().normalize();
+			logger.info("Root element of the doc is " + 
+	                 xml.getDocumentElement().getNodeName());
 			logger.info("Connect data parsed!");
 			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
-			logger.info("envelopeStatus=" + envelopeStatus);
 			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
 			logger.info("envelopeId=" + envelopeId);
 			String timeGenerated = envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getChildNodes().item(0).getNodeValue();
@@ -175,7 +180,7 @@ public class WebhookLib {
 				filesDir.setExecutable(true, false);
 				filesDir.setWritable(true, false);
 			}
-			File envelopeDir = new File(filesDir + "E" + envelopeId);
+			File envelopeDir = new File("/tmp/" + xmlFileDir + "E" + envelopeId);
 			logger.info("envelopeDir=" + envelopeDir);
 			if (!envelopeDir.isDirectory()) {
 				if (!envelopeDir.mkdirs())
@@ -184,7 +189,7 @@ public class WebhookLib {
 				envelopeDir.setExecutable(true, false);
 				envelopeDir.setWritable(true, false);
 			}
-			String filename = envelopeDir + "/T" + timeGenerated.replace(':', '_') + ".xml";
+			String filename = "/tmp/" + xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(':', '_') + ".xml";
 			logger.info("filename=" + filename);
 			try {
 				File xmlFile = new File(filename);
@@ -574,3 +579,4 @@ public class WebhookLib {
 	}
 
 }
+
