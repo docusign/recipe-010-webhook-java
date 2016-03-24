@@ -2,6 +2,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.StringReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -152,7 +153,7 @@ public class WebhookLib {
 		try {
 			builder = factory.newDocumentBuilder();
 
-			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes())));
+			org.w3c.dom.Document xml = builder.parse(new InputSource(new StringReader(data)));
 			xml.getDocumentElement ().normalize();
                         logger.info("Connect data parsed!");
 			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
