@@ -153,12 +153,11 @@ public class WebhookLib {
 
 			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes("utf-8"))));
 			logger.info("Connect data parsed!");
-			Element root = xml.getDocumentElement();
-			Element envelopeStatus = (Element) root.getElementsByTagName("EnvelopeStatus").item(0);
+			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
 			logger.info("envelopeStatus=" + envelopeStatus);
-			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getNodeValue();
+			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
 			logger.info("envelopeId=" + envelopeId);
-			String timeGenerated = envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getNodeValue();
+			String timeGenerated = envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getChildNodes().item(0).getNodeValue();
 			logger.info("timeGenerated=" + timeGenerated);
 
 			// Store the file. Create directories as needed
@@ -204,17 +203,17 @@ public class WebhookLib {
 			// log the event
 			logger.info("DocuSign Webhook: created " + filename);
 
-			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getNodeValue())) {
+			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue())) {
 				// Loop through the DocumentPDFs element, storing each document.
-				NodeList nodeList = root.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
+				NodeList nodeList = xml.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
 				for (int i = 0; i < nodeList.getLength(); i++) {
 					Element pdf = (Element) nodeList.item(i);
-					filename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getNodeValue() + ".pdf";
+					filename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue() + ".pdf";
 					String fullFilename = envelopeDir + "/" + filename;
 					try {
 						File pdfFile = new File(fullFilename);
 						byte[] pdfBytes = Base64.getDecoder()
-								.decode(pdf.getElementsByTagName("PDFBytes").item(0).getNodeValue());
+								.decode(pdf.getElementsByTagName("PDFBytes").item(0).getChildNodes().item(0).getNodeValue());
 						FileOutputStream fos = new FileOutputStream(pdfFile);
 						try {
 							fos.write(pdfBytes);
@@ -493,57 +492,57 @@ public class WebhookLib {
 			NodeList nodeList = recipientStatuses.getChildNodes();
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Element recipient = (Element) nodeList.item(i);
-				recipients = "{" + "\"type\":\"" + recipient.getElementsByTagName("Type").item(0).getNodeValue() + "\","
-						+ "\"email\":\"" + recipient.getElementsByTagName("Email").item(0).getNodeValue() + "\","
-						+ "\"user_name\":\"" + recipient.getElementsByTagName("UserName").item(0).getNodeValue() + "\","
-						+ "\"routing_order\":\"" + recipient.getElementsByTagName("RoutingOrder").item(0).getNodeValue()
+				recipients = "{" + "\"type\":\"" + recipient.getElementsByTagName("Type").item(0).getChildNodes().item(0).getNodeValue() + "\","
+						+ "\"email\":\"" + recipient.getElementsByTagName("Email").item(0).getChildNodes().item(0).getNodeValue() + "\","
+						+ "\"user_name\":\"" + recipient.getElementsByTagName("UserName").item(0).getChildNodes().item(0).getNodeValue() + "\","
+						+ "\"routing_order\":\"" + recipient.getElementsByTagName("RoutingOrder").item(0).getChildNodes().item(0).getNodeValue()
 						+ "\"," + "\"sent_timestamp\":\""
-						+ recipient.getElementsByTagName("Sent").item(0).getNodeValue() + "\","
+						+ recipient.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue() + "\","
 						+ "\"delivered_timestamp\":\""
-						+ recipient.getElementsByTagName("Delivered").item(0).getNodeValue() + "\","
-						+ "\"signed_timestamp\":\"" + recipient.getElementsByTagName("Signed").item(0).getNodeValue()
-						+ "\"," + "\"status\":\"" + recipient.getElementsByTagName("Status").item(0).getNodeValue()
+						+ recipient.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue() + "\","
+						+ "\"signed_timestamp\":\"" + recipient.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue()
+						+ "\"," + "\"status\":\"" + recipient.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue()
 						+ "\"" + "}";
 			}
 
 			String documents = "";
-			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getNodeValue();
+			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
 			// iterate through the documents if the envelope is Completed
-			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getNodeValue())) {
+			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue())) {
 				// Loop through the DocumentPDFs element, noting each document.
 				nodeList = root.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
 				for (int i = 0; i < nodeList.getLength(); i++) {
 					Element pdf = (Element) nodeList.item(i);
-					String docFilename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getNodeValue()
+					String docFilename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue()
 							+ ".pdf";
 					documents = "{" + "\"document_ID\":\""
-							+ pdf.getElementsByTagName("DocumentID").item(0).getNodeValue() + "\","
-							+ "\"document_type\":\"" + pdf.getElementsByTagName("DocumentType").item(0).getNodeValue()
-							+ "\"," + "\"name\":\"" + pdf.getElementsByTagName("Name").item(0).getNodeValue() + "\","
+							+ pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue() + "\","
+							+ "\"document_type\":\"" + pdf.getElementsByTagName("DocumentType").item(0).getChildNodes().item(0).getNodeValue()
+							+ "\"," + "\"name\":\"" + pdf.getElementsByTagName("Name").item(0).getChildNodes().item(0).getNodeValue() + "\","
 							+ "\"url\":\"" + filesDirUrl + "E" + envelopeId + "/" + docFilename + "\"" + "}";
 				}
 			}
 
 			result = "{" + "\"envelopeId\":\"" + envelopeId + "\"," + "\"xml_url\":\"" + filesDirUrl + "E" + envelopeId
 					+ "/" + filename + "\"," + "\"time_generated\":\""
-					+ envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getNodeValue() + "\","
-					+ "\"subject\":\"" + envelopeStatus.getElementsByTagName("Subject").item(0).getNodeValue() + "\","
-					+ "\"sender_user_name\":\"" + envelopeStatus.getElementsByTagName("UserName").item(0).getNodeValue()
+					+ envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"subject\":\"" + envelopeStatus.getElementsByTagName("Subject").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"sender_user_name\":\"" + envelopeStatus.getElementsByTagName("UserName").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"sender_email\":\""
-					+ envelopeStatus.getElementsByTagName("Email").item(0).getNodeValue() + "\","
-					+ "\"envelope_status\":\"" + envelopeStatus.getElementsByTagName("Status").item(0).getNodeValue()
+					+ envelopeStatus.getElementsByTagName("Email").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"envelope_status\":\"" + envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"envelope_sent_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Sent").item(0).getNodeValue() + "\","
+					+ envelopeStatus.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_created_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Cretaed").item(0).getNodeValue() + "\","
+					+ envelopeStatus.getElementsByTagName("Cretaed").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_delivered_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Delivered").item(0).getNodeValue() + "\","
+					+ envelopeStatus.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_signed_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Signed").item(0).getNodeValue() + "\","
+					+ envelopeStatus.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_completed_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Completed").item(0).getNodeValue() + "\","
-					+ "\"timezone\":\"" + root.getElementsByTagName("TimeZone").item(0).getNodeValue() + "\","
-					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getNodeValue()
+					+ envelopeStatus.getElementsByTagName("Completed").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"timezone\":\"" + root.getElementsByTagName("TimeZone").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
 		} catch (Exception e) {
 			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML stored from DocuSign Connect: " + e.getMessage());
