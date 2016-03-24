@@ -83,7 +83,6 @@ public class WebhookLib {
 
 		webhookUrl = (myUrl != null && !myUrl.isEmpty()) ? myUrl + webhookSuffix
 				: "http://localhost:5000/" + webhookSuffix;
-		webhookUrl = "https://ds-webhook-java.herokuapp.com/" + webhookSuffix;
 		dsSigner1Name = dsRecipeLib.getSignerName(dsSigner1Name);
 		dsSigner1Email = dsRecipeLib.getSignerEmail(dsSigner1Email);
 		dsCC1Name = dsRecipeLib.getSignerName(dsCC1Name);
