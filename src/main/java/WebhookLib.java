@@ -150,10 +150,14 @@ public class WebhookLib {
 			builder = factory.newDocumentBuilder();
 
 			org.w3c.dom.Document xml = builder.parse(data);
+			logger.info("Connect data parsed!");
 			Element root = xml.getDocumentElement();
 			Element envelopeStatus = (Element) root.getElementsByTagName("EnvelopeStatus").item(0);
+			logger.info("envelopeStatus=" + envelopeStatus);
 			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getNodeValue();
+			logger.info("envelopeId=" + envelopeId);
 			String timeGenerated = envelopeStatus.getElementsByTagName("TimeGenerated").item(0).getNodeValue();
+			logger.info("timeGenerated=" + timeGenerated);
 
 			// Store the file. Create directories as needed
 			// Some systems might still not like files or directories to start
@@ -162,6 +166,7 @@ public class WebhookLib {
 			// File filesDir = new File(System.getProperty("user.dir") + "/" +
 			// xmlFileDir);
 			File filesDir = new File("/tmp/" + xmlFileDir);
+			logger.info("filesDir=" + filesDir);
 			if (!filesDir.isDirectory()) {
 				if (!filesDir.mkdirs())
 					logger.info("Cannot create folder: " + filesDir);
@@ -170,6 +175,7 @@ public class WebhookLib {
 				filesDir.setWritable(true, false);
 			}
 			File envelopeDir = new File(filesDir + "E" + envelopeId);
+			logger.info("envelopeDir=" + envelopeDir);
 			if (!envelopeDir.isDirectory()) {
 				if (!envelopeDir.mkdirs())
 					logger.info("Cannot create folder: " + envelopeDir);
@@ -178,6 +184,7 @@ public class WebhookLib {
 				envelopeDir.setWritable(true, false);
 			}
 			String filename = envelopeDir + "/T" + timeGenerated.replace(':', '_') + ".xml";
+			logger.info("filename=" + filename);
 			try {
 				File xmlFile = new File(filename);
 				FileWriter fw = new FileWriter(xmlFile);
@@ -220,7 +227,7 @@ public class WebhookLib {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect!");
+			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect: " + e.getMessage());
 		}
 	}
 
@@ -537,7 +544,7 @@ public class WebhookLib {
 					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
 		} catch (Exception e) {
-			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect!");
+			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect: " + e.getMessage());
 		}
 		logger.info("result=" + result);
 		return result;
