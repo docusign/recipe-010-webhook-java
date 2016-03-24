@@ -1,3 +1,4 @@
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.docusign.esign.model.*;
 import com.docusign.esign.api.*;
@@ -149,7 +151,7 @@ public class WebhookLib {
 		try {
 			builder = factory.newDocumentBuilder();
 
-			org.w3c.dom.Document xml = builder.parse(data);
+			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes("utf-8"))));
 			logger.info("Connect data parsed!");
 			Element root = xml.getDocumentElement();
 			Element envelopeStatus = (Element) root.getElementsByTagName("EnvelopeStatus").item(0);
@@ -544,7 +546,7 @@ public class WebhookLib {
 					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
 		} catch (Exception e) {
-			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML sent by DocuSign Connect: " + e.getMessage());
+			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML stored from DocuSign Connect: " + e.getMessage());
 		}
 		logger.info("result=" + result);
 		return result;
