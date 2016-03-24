@@ -159,16 +159,20 @@ public class WebhookLib {
 			// Some systems might still not like files or directories to start
 			// with numbers.
 			// So we prefix the envelope ids with E and the timestamps with T
-			File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir);
+			// File filesDir = new File(System.getProperty("user.dir") + "/" +
+			// xmlFileDir);
+			File filesDir = new File("/tmp/" + xmlFileDir);
 			if (!filesDir.isDirectory()) {
-				filesDir.mkdirs();
+				if (!filesDir.mkdirs())
+					logger.info("Cannot create folder: " + filesDir);
 				filesDir.setReadable(true, false);
 				filesDir.setExecutable(true, false);
 				filesDir.setWritable(true, false);
 			}
 			File envelopeDir = new File(filesDir + "E" + envelopeId);
 			if (!envelopeDir.isDirectory()) {
-				envelopeDir.mkdirs();
+				if (!envelopeDir.mkdirs())
+					logger.info("Cannot create folder: " + envelopeDir);
 				envelopeDir.setReadable(true, false);
 				envelopeDir.setExecutable(true, false);
 				envelopeDir.setWritable(true, false);
