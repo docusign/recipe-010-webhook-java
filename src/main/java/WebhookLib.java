@@ -152,7 +152,8 @@ public class WebhookLib {
 		try {
 			builder = factory.newDocumentBuilder();
 
-			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes("utf-8"))));
+			org.w3c.dom.Document xml = builder.parse(new InputSource(new ByteArrayInputStream(data.getBytes())));
+			xml.getDocumentElement ().normalize();
                         logger.info("Connect data parsed!");
 			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
 			String envelopeId = envelopeStatus.getElementsByTagName("EnvelopeID").item(0).getChildNodes().item(0).getNodeValue();
@@ -483,8 +484,8 @@ public class WebhookLib {
 
 			InputStream fis = new FileInputStream(file);
 			org.w3c.dom.Document xml = builder.parse(fis);
-			Element root = xml.getDocumentElement();
-			Element envelopeStatus = (Element) root.getElementsByTagName("EnvelopeStatus").item(0);
+			xml.getDocumentElement ().normalize();
+			Element envelopeStatus = (Element) xml.getElementsByTagName("EnvelopeStatus").item(0);
 			Element recipientStatuses = (Element) envelopeStatus.getElementsByTagName("RecipientStatuses").item(0);
 
 			// iterate through the recipients
@@ -510,7 +511,7 @@ public class WebhookLib {
 			// iterate through the documents if the envelope is Completed
 			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue())) {
 				// Loop through the DocumentPDFs element, noting each document.
-				nodeList = root.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
+				nodeList = xml.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
 				for (int i = 0; i < nodeList.getLength(); i++) {
 					Element pdf = (Element) nodeList.item(i);
 					String docFilename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue()
@@ -541,8 +542,8 @@ public class WebhookLib {
 					+ envelopeStatus.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_completed_timestamp\":\""
 					+ envelopeStatus.getElementsByTagName("Completed").item(0).getChildNodes().item(0).getNodeValue() + "\","
-					+ "\"timezone\":\"" + root.getElementsByTagName("TimeZone").item(0).getChildNodes().item(0).getNodeValue() + "\","
-					+ "\"timezone_offset\":\"" + root.getElementsByTagName("TimeZoneOffset").item(0).getChildNodes().item(0).getNodeValue()
+					+ "\"timezone\":\"" + xml.getElementsByTagName("TimeZone").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ "\"timezone_offset\":\"" + xml.getElementsByTagName("TimeZoneOffset").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
 		} catch (Exception e) {
 			logger.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't parse the XML stored from DocuSign Connect: " + e.getMessage());
