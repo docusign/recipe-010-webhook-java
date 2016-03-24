@@ -2,11 +2,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.StringReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -491,7 +491,7 @@ public class WebhookLib {
 
 			// iterate through the recipients
 			String recipients = "";
-			NodeList nodeList = recipientStatuses.getChildNodes();
+			NodeList nodeList = recipientStatuses.getElementsByTagName("RecipientStatus");
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Element recipient = (Element) nodeList.item(i);
 				recipients = "{" + "\"type\":\"" + recipient.getElementsByTagName("Type").item(0).getChildNodes().item(0).getNodeValue() + "\","
@@ -499,11 +499,11 @@ public class WebhookLib {
 						+ "\"user_name\":\"" + recipient.getElementsByTagName("UserName").item(0).getChildNodes().item(0).getNodeValue() + "\","
 						+ "\"routing_order\":\"" + recipient.getElementsByTagName("RoutingOrder").item(0).getChildNodes().item(0).getNodeValue()
 						+ "\"," + "\"sent_timestamp\":\""
-						+ recipient.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue() + "\","
+						+ (recipient.getElementsByTagName("Sent").getLength()>0?recipient.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 						+ "\"delivered_timestamp\":\""
-						+ recipient.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue() + "\","
-						+ "\"signed_timestamp\":\"" + recipient.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue()
-						+ "\"," + "\"status\":\"" + recipient.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue()
+						+ (recipient.getElementsByTagName("Delivered").getLength()>0?recipient.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
+						+ "\"signed_timestamp\":\"" + (recipient.getElementsByTagName("Signed").getLength()>0?recipient.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue():"")
+						+ "\"," + "\"status\":\"" + (recipient.getElementsByTagName("Status").getLength()>0?recipient.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue():"")
 						+ "\"" + "}";
 			}
 
@@ -512,13 +512,13 @@ public class WebhookLib {
 			// iterate through the documents if the envelope is Completed
 			if ("Completed".equals(envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue())) {
 				// Loop through the DocumentPDFs element, noting each document.
-				nodeList = xml.getElementsByTagName("DocumentPDFs").item(0).getChildNodes();
+				nodeList = xml.getElementsByTagName("DocumentPDFs");
 				for (int i = 0; i < nodeList.getLength(); i++) {
 					Element pdf = (Element) nodeList.item(i);
-					String docFilename = docPrefix + pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue()
+					String docFilename = docPrefix + (pdf.getElementsByTagName("DocumentID").getLength()>0?pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue():"")
 							+ ".pdf";
 					documents = "{" + "\"document_ID\":\""
-							+ pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue() + "\","
+							+ (pdf.getElementsByTagName("DocumentID").getLength()>0?pdf.getElementsByTagName("DocumentID").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 							+ "\"document_type\":\"" + pdf.getElementsByTagName("DocumentType").item(0).getChildNodes().item(0).getNodeValue()
 							+ "\"," + "\"name\":\"" + pdf.getElementsByTagName("Name").item(0).getChildNodes().item(0).getNodeValue() + "\","
 							+ "\"url\":\"" + filesDirUrl + "E" + envelopeId + "/" + docFilename + "\"" + "}";
@@ -534,15 +534,15 @@ public class WebhookLib {
 					+ envelopeStatus.getElementsByTagName("Email").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"envelope_status\":\"" + envelopeStatus.getElementsByTagName("Status").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"envelope_sent_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ (envelopeStatus.getElementsByTagName("Sent").getLength()>0?envelopeStatus.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_created_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Cretaed").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ (envelopeStatus.getElementsByTagName("Cretaed").getLength()>0?envelopeStatus.getElementsByTagName("Cretaed").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_delivered_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ (envelopeStatus.getElementsByTagName("Delivered").getLength()>0?envelopeStatus.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_signed_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ (envelopeStatus.getElementsByTagName("Signed").getLength()>0?envelopeStatus.getElementsByTagName("Signed").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_completed_timestamp\":\""
-					+ envelopeStatus.getElementsByTagName("Completed").item(0).getChildNodes().item(0).getNodeValue() + "\","
+					+ (envelopeStatus.getElementsByTagName("Completed").getLength()>0?envelopeStatus.getElementsByTagName("Completed").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"timezone\":\"" + xml.getElementsByTagName("TimeZone").item(0).getChildNodes().item(0).getNodeValue() + "\","
 					+ "\"timezone_offset\":\"" + xml.getElementsByTagName("TimeZoneOffset").item(0).getChildNodes().item(0).getNodeValue()
 					+ "\"," + "\"recipients\":\"" + recipients + "\"," + "\"documents\":\"" + documents + "\"" + "}";
