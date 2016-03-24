@@ -168,7 +168,7 @@ public class WebhookLib {
 			// So we prefix the envelope ids with E and the timestamps with T
 			// File filesDir = new File(System.getProperty("user.dir") + "/" +
 			// xmlFileDir);
-			File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir);
+			File filesDir = new File("/tmp/" + xmlFileDir);
 			logger.info("filesDir=" + filesDir);
 			if (!filesDir.isDirectory()) {
 				if (!filesDir.mkdirs())
@@ -452,7 +452,7 @@ public class WebhookLib {
 		// remove http or https
 		filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
 		logger.info("filesDirUrl=" + filesDirUrl);
-		File filesDir = new File(System.getProperty("user.dir") + "/" + xmlFileDir + "E" + params.get("envelope_id"));
+		File filesDir = new File("/tmp/" + xmlFileDir + "E" + params.get("envelope_id"));
 		logger.info("filesDir=" + filesDir);
 
 		String results = "[{}]";
