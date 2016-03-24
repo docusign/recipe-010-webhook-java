@@ -14,6 +14,7 @@ public class Webhook {
 
 		port(Integer.valueOf(System.getenv("PORT")));
 		staticFileLocation("/tmp/files");
+		staticFileLocation("/public");
 
 		get("/", (request, response) -> {
 			String op = request.queryParams("op");
