@@ -338,6 +338,7 @@ public class WebhookLib {
 		EnvelopesApi envelopesApi = new EnvelopesApi();
 		EnvelopeSummary envelopeSummary;
 		try {
+			logger.debug(new JSON().serialize(envelopeDefinition));
 			envelopeSummary = envelopesApi.createEnvelope(dsAccountId, envelopeDefinition);
 			if (envelopeSummary == null || envelopeSummary.getEnvelopeId() == null) {
 				return "{\"ok\": false, \"html\": \"<h3>Problem</h3> \r\n  <p>Error calling DocuSign</p>\"}";
@@ -535,7 +536,7 @@ public class WebhookLib {
 					+ "\"," + "\"envelope_sent_timestamp\":\""
 					+ (envelopeStatus.getElementsByTagName("Sent").getLength()>0?envelopeStatus.getElementsByTagName("Sent").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_created_timestamp\":\""
-					+ (envelopeStatus.getElementsByTagName("Cretaed").getLength()>0?envelopeStatus.getElementsByTagName("Cretaed").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
+					+ (envelopeStatus.getElementsByTagName("Created").getLength()>0?envelopeStatus.getElementsByTagName("Created").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_delivered_timestamp\":\""
 					+ (envelopeStatus.getElementsByTagName("Delivered").getLength()>0?envelopeStatus.getElementsByTagName("Delivered").item(0).getChildNodes().item(0).getNodeValue():"") + "\","
 					+ "\"envelope_signed_timestamp\":\""
